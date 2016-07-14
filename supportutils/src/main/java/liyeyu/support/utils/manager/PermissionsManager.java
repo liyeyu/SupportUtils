@@ -28,7 +28,6 @@ import liyeyu.support.utils.utils.ToastUtil;
 public class PermissionsManager extends BaseManager{
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
     final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
-    //管理危险权限集合-申请一组
     private List<String> mPermmisions = new ArrayList<>();
     private CheckCallBack mCheckCallBack;
     private static PermissionsManager mManager;
@@ -39,7 +38,11 @@ public class PermissionsManager extends BaseManager{
 
     public static PermissionsManager get() {
         if (mManager == null) {
-            mManager = new PermissionsManager();
+            synchronized (PermissionsManager.class){
+                if (mManager == null) {
+                    mManager = new PermissionsManager();
+                }
+            }
         }
         return mManager;
     }
@@ -56,7 +59,7 @@ public class PermissionsManager extends BaseManager{
                 if (!mActivity.shouldShowRequestPermissionRationale(permission)) {
                     mActivity.requestPermissions(new String[]{permission}, REQUEST_CODE_ASK_PERMISSIONS);
                 } else {
-                    //已禁止过，弹窗提示
+                    //已禁止权限，弹窗提示
                     showPermission(mActivity,String.format(askText,permission), permission);
                 }
             } else {
@@ -69,13 +72,9 @@ public class PermissionsManager extends BaseManager{
                 mCheckCallBack.onSuccess(permission);
             }
         }
-
-        //检测用户是否已禁止过该权限
     }
-
     /**
      * 处理结果
-     *
      * @param requestCode
      * @param permissions
      * @param grantResults
@@ -95,24 +94,12 @@ public class PermissionsManager extends BaseManager{
         }
     }
 
-
-    /**
-     * 检查权限是否被添加过
-     *
-     * @param permission
-     */
     @TargetApi(Build.VERSION_CODES.M)
     private boolean addPermission(Activity mActivity,String permission) {
         int hasPermission = mActivity.checkSelfPermission(permission);
         return hasPermission != PackageManager.PERMISSION_GRANTED;
     }
 
-    /**
-     * 显示权限被禁止弹窗
-     *
-     * @param msg
-     * @param permission
-     */
     @TargetApi(Build.VERSION_CODES.M)
     private void showPermission(final Activity mActivity,String msg, final String permission) {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(mActivity);
@@ -132,12 +119,6 @@ public class PermissionsManager extends BaseManager{
         mBuilder.create().show();
     }
 
-    /**
-     * 检查Notification是否被禁止
-     * 不能再service中检查，因为进程uid不同
-     * @param context
-     * @return
-     */
     @TargetApi(Build.VERSION_CODES.BASE_1_1)
     public boolean checkNotificationPermissions(Context context) {
         AppOpsManager appOpsManager = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
@@ -161,7 +142,7 @@ public class PermissionsManager extends BaseManager{
     }
 
     /**
-     * 打开应用详情设置界面
+     * 打开应用设置详情界面
      * @param context
      */
     @TargetApi(Build.VERSION_CODES.DONUT)

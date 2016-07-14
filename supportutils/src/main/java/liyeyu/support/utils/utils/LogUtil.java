@@ -10,17 +10,14 @@ import java.io.IOException;
 
 /**
  * @author yujian
- * @Description log打印控制类
  * @date 2016/5/12 15:13
  */
 public class LogUtil {
     /**
-     * tag前缀,方便过滤
      */
     public static String customTagPrefix = "";
 
     /**
-     * log打印开关
      */
     public static boolean DEBUG = true;
 
@@ -97,9 +94,7 @@ public class LogUtil {
 
     /**
      *
-     * @param logFilePath 保存日志的路径
      * @param tr
-     * @param override 是否覆盖文件
      */
     public static void f(String logFilePath, Throwable tr, boolean override) {
         File logFile = new File(logFilePath);

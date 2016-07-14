@@ -25,13 +25,13 @@ public class ToastUtil {
 	};
 
 	public static void showShortToast(Context context, String message) {
-		TextView text = new TextView(context);// 显示的提示文字
+		TextView text = new TextView(context);
 		text.setText(message);
 		text.setBackgroundColor(Color.BLACK);
 		text.setPadding(10, 10, 10, 10);
 
 		if (mToast != null) {// 
-			mHandler.postDelayed(r, 0);//隐藏toast
+			mHandler.postDelayed(r, 0);
 		} else {
 			mToast = new Toast(context);
 			mToast.setDuration(Toast.LENGTH_SHORT);

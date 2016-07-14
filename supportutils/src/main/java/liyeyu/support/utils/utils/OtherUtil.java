@@ -20,7 +20,6 @@ import java.util.Map;
 public class OtherUtil {
 
 	/**
-	 * 获取当前线程堆栈信息
 	 *
 	 * @return
 	 */
@@ -29,8 +28,6 @@ public class OtherUtil {
 	}
 
 	/**
-	 * 获取调用者堆栈信息
-	 *
 	 * @return
 	 */
 	public static StackTraceElement getCallerStackTraceElement() {
@@ -38,8 +35,6 @@ public class OtherUtil {
 	}
 
 	/**
-	 * 判断是否是主线程
-	 *
 	 * @return
 	 */
 	@TargetApi(Build.VERSION_CODES.CUPCAKE)
@@ -54,8 +49,6 @@ public class OtherUtil {
 	}
 
 	/**
-	 * 软键盘是否显示状态
-	 *
 	 * @param mContext
 	 * @param view
 	 * @param
@@ -68,7 +61,7 @@ public class OtherUtil {
 		InputMethodManager imm = (InputMethodManager) view.getContext()
 				.getSystemService(Context.INPUT_METHOD_SERVICE);
 
-		if (config.hardKeyboardHidden == Configuration.KEYBOARDHIDDEN_NO) { // 如果未隐藏
+		if (config.hardKeyboardHidden == Configuration.KEYBOARDHIDDEN_NO) {
 			isActive = true;
 		}
 		imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -76,8 +69,6 @@ public class OtherUtil {
 	}
 
 	/**
-	 * 获得当前在栈顶的Activity
-	 *
 	 * @param mContext
 	 * @return
 	 */
@@ -88,7 +79,6 @@ public class OtherUtil {
 	}
 
 	/**
-	 * 通过反射获取栈顶activity的实例
 	 * @return
      */
 	public static Activity getCurrentActivity() {

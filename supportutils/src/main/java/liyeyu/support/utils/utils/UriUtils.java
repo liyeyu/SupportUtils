@@ -23,7 +23,6 @@ import java.io.InputStream;
 public class UriUtils {
 
 	/**
-	 * 根据Uri获取图片绝对路径，解决Android4.4以上版本Uri转换
 	 * @param context
 	 * @param imageUri
 	 * @author liyeyu
@@ -125,8 +124,6 @@ public class UriUtils {
 	}
 	
 	/**
-	 * 根据需求的宽和高以及图片实际的宽和高计算SampleSize
-	 * 
 	 * @param options
 	 * @param reqWidth
 	 * @param reqHeight
@@ -152,55 +149,45 @@ public class UriUtils {
 	}
 	
 	/**
-	 * 根据图片的质量进行压缩
-	 * 
 	 * @param image
 	 * @param size
-	 *            质量压缩的大小阈值
-	 * @return
 	 */
 	public static Bitmap compressImage(Bitmap image, int size) {
 		ByteArrayInputStream isBm = (ByteArrayInputStream) compressImageBackInputStream(
 				image, size);
-		Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);// 把ByteArrayInputStream数据生成图片
+		Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);
 		return bitmap;
 	}
 	
 	/**
-	 * 按质量压缩图片返回一个InputStream
-	 * 
 	 * @param image
 	 * @param size
-	 *            质量压缩的大小阈值
 	 * @return
 	 */
 	public static InputStream compressImageBackInputStream(Bitmap image,
 			int size) {
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		image.compress(Bitmap.CompressFormat.JPEG, 100, baos);// 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+		image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 		int options = 100;
-		while (baos.toByteArray().length / 1024 > size) { // 循环判断如果压缩后图片是否大于100kb,大于继续压缩
-			baos.reset();// 重置baos即清空baos
-			options -= 10;// 每次都减少10
-			image.compress(Bitmap.CompressFormat.JPEG, options, baos);// 这里压缩options%，把压缩后的数据存放到baos中
+		while (baos.toByteArray().length / 1024 > size) {
+			baos.reset();
+			options -= 10;
+			image.compress(Bitmap.CompressFormat.JPEG, options, baos);
 
 		}
 		System.out.println(baos.toByteArray().length / 1024);
-		InputStream is = new ByteArrayInputStream(baos.toByteArray());// 把压缩后的数据baos存放到ByteArrayInputStream中
+		InputStream is = new ByteArrayInputStream(baos.toByteArray());
 		return is;
 	}
 	
 	public static Bitmap GetRightOritationNew(String filePath){
 		//		Bitmap bitmap  = BitmapFactory.decodeFile(filePath);	
-
-		//优化内存溢出方法1
 		Options options = new Options();
 //		options.inJustDecodeBounds = true;  
 //		BitmapFactory.decodeFile(filePath, options);  
 		
-//		options.inSampleSize = UriUtils.caculateInSampleSize(options, options.outWidth, options.outHeight);//图片大小，设置越大，图片越不清晰，占用空间越小  
-		// 使用获得到的InSampleSize再次解析图片  
+//		options.inSampleSize = UriUtils.caculateInSampleSize(options, options.outWidth, options.outHeight);
 		options.inSampleSize = 2;
         options.inJustDecodeBounds = false;
 		options.inPreferredConfig = Bitmap.Config.RGB_565;
@@ -235,8 +222,7 @@ public class UriUtils {
 //			}		    
 //		}		
 //		if (degree != 0) {  
-//			// 旋转图片  
-//			Matrix m = new Matrix();    
+//			Matrix m = new Matrix();
 //			m.setRotate(degree, (float) bitmap.getWidth() / 2, (float) bitmap.getHeight() / 2);    
 //			try {    
 //				if(degree==180){
@@ -244,7 +230,7 @@ public class UriUtils {
 //					Bitmap b2 = Bitmap.createBitmap(    
 //							bitmap, 0, 0, 300, 150, m, true);    
 //					if (bitmap != b2) {    
-//						bitmap.recycle();  //Bitmap操作完应该显示的释放  
+//						bitmap.recycle();
 //						System.gc();
 //						bitmap = b2;    
 //					}    
@@ -252,14 +238,13 @@ public class UriUtils {
 //					Bitmap b2 = Bitmap.createBitmap(    
 //							bitmap, 0, 0, 150, 300, m, true);    
 //					if (bitmap != b2) {    
-//						bitmap.recycle();  //Bitmap操作完应该显示的释放  
+//						bitmap.recycle();
 //						System.gc();
 //						bitmap = b2;    
 //					}   
 //				}
-//			} catch (OutOfMemoryError ex) {    
-//				// 建议大家如何出现了内存不足异常，最好return 原始的bitmap对象。.
-//				return bitmap;	
+//			} catch (OutOfMemoryError ex) {
+//				return bitmap;
 //			}    
 //		}		
 		return bitmap;		
@@ -298,8 +283,6 @@ public class UriUtils {
 		return degree;
 	}
 	/**
-	 * 检查是否存在SDCard
-	 *
 	 * @return
 	 */
 	public static boolean hasSdcard() {

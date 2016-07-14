@@ -23,7 +23,7 @@ import java.util.Date;
 import liyeyu.support.utils.manager.PermissionsManager;
 
 /**
- * 拍照选图片管理的工具类
+ * Pictures selected image management tools
  * Created by liyeyu on 2016/5/17.
  */
 public class PicUtil {
@@ -36,7 +36,6 @@ public class PicUtil {
 
 
     /**
-     * 开启单选图片相册
      * @param context
      */
     public static void openPhoto(Activity context){
@@ -48,7 +47,6 @@ public class PicUtil {
         context.startActivityForResult(intent, CODE_SELECT_PIC);
     }
     /**
-     * 开启单选图片相册
      * @param context
      */
     public static void openMultiplePhoto(Activity context){
@@ -57,7 +55,6 @@ public class PicUtil {
     }
 
     /**
-     * 查看大图-系统
      * @param context
      * @param filePath
      */
@@ -70,7 +67,6 @@ public class PicUtil {
     }
 
     /**
-     * 打开照相
      * @param context
      * @return
      */
@@ -126,12 +122,11 @@ public class PicUtil {
         return null;
     }
 
-    // 判断时候有SD卡
     public static boolean isEnvironment(Context context) {
 
         String sdState = Environment.getExternalStorageState();
         if (!sdState.equals(Environment.MEDIA_MOUNTED)) {
-            Toast.makeText(context, "请检查SD卡是否安装", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Please check whether the SD card installed", Toast.LENGTH_LONG).show();
             return false;
         } else {
             return true;
@@ -139,24 +134,22 @@ public class PicUtil {
     }
 
     /**
-     * 获取sd卡
      *
      * @return
      */
     public static String getSDCardPath() {
 
         String cmd = "cat /proc/mounts";
-        Runtime run = Runtime.getRuntime();// 返回与当前 Java 应用程序相关的运行时对象
+        Runtime run = Runtime.getRuntime();
         BufferedInputStream in = null;
         BufferedReader inBr = null;
         try {
-            Process p = run.exec(cmd);// 启动另一个进程来执行命令
+            Process p = run.exec(cmd);
             in = new BufferedInputStream(p.getInputStream());
             inBr = new BufferedReader(new InputStreamReader(in));
 
             String lineStr;
             while ((lineStr = inBr.readLine()) != null) {
-                // 获得命令执行后在控制台的输出信息
                 if (lineStr.contains("sdcard")
                         && lineStr.contains(".android_secure")) {
                     String[] strArray = lineStr.split(" ");
@@ -166,10 +159,10 @@ public class PicUtil {
                         return result;
                     }
                 }
-                // 检查命令是否执行失败。
+                //Check whether the command is failure
                 if (p.waitFor() != 0 && p.exitValue() == 1) {
-                    // p.exitValue()==0表示正常结束，1：非正常结束
-                    Log.e("getSDCardPath", "命令执行失败!");
+                    // p.exitValue()==0 Said the end of the normal;1：abend
+                    Log.e("getSDCardPath", "Failed to perform the command!");
                 }
             }
         } catch (Exception e) {
@@ -195,8 +188,6 @@ public class PicUtil {
     }
 
     /**
-     * 裁剪图片方法实现
-     *
      * @param uri
      */
     public static void startPhotoZoom(Uri uri,Activity mActivity) {
@@ -204,10 +195,10 @@ public class PicUtil {
         intent.setDataAndType(uri, "image/*");
         // 设置裁剪
         intent.putExtra("crop", "true");
-        // aspectX aspectY 是宽高的比例
+        // aspectX aspectY Is wide high proportion
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
-        // outputX outputY 是裁剪图片宽高
+        // outputX outputY Is wide high cut images
         intent.putExtra("outputX", 320);
         intent.putExtra("outputY", 320);
         intent.putExtra("return-data", true);
