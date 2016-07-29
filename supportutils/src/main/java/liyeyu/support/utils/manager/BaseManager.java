@@ -8,7 +8,6 @@ import android.app.Application;
 public class BaseManager {
 
     public static Application app;
-
     public static void init(Application context) {
         app =  context;
     }

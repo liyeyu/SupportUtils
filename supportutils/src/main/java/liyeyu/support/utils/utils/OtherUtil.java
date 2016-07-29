@@ -57,8 +57,11 @@ public class OtherUtil {
 	@TargetApi(Build.VERSION_CODES.CUPCAKE)
 	public static boolean hideSoftInputFromWindow(Activity mContext, View view) {
 		boolean isActive = false;
+		if(view.getWindowToken()==null){
+			return isActive;
+		}
 		Configuration config = mContext.getResources().getConfiguration();
-		InputMethodManager imm = (InputMethodManager) view.getContext()
+		InputMethodManager imm = (InputMethodManager) mContext
 				.getSystemService(Context.INPUT_METHOD_SERVICE);
 
 		if (config.hardKeyboardHidden == Configuration.KEYBOARDHIDDEN_NO) {
