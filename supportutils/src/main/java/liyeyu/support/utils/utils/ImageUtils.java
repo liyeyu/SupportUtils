@@ -64,8 +64,9 @@ public class ImageUtils {
 										int height) {
 		BitmapFactory.Options newOpts = new BitmapFactory.Options();
 		newOpts.inJustDecodeBounds = true;
-		newOpts.inJustDecodeBounds = false;
 		newOpts.inSampleSize = calculateInSampleSize(newOpts, width, height);
+		BitmapFactory.decodeFile(srcPath, newOpts);
+		newOpts.inJustDecodeBounds = false;
 		Bitmap bitmap = BitmapFactory.decodeFile(srcPath, newOpts);
 		return compressImage(bitmap, size);
 	}
@@ -74,8 +75,9 @@ public class ImageUtils {
 											int width, int height) {
 		BitmapFactory.Options newOpts = new BitmapFactory.Options();
 		newOpts.inJustDecodeBounds = true;
-		newOpts.inJustDecodeBounds = false;
 		newOpts.inSampleSize = calculateInSampleSize(newOpts, width, height);
+		BitmapFactory.decodeFile(srcPath, newOpts);
+		newOpts.inJustDecodeBounds = false;
 		Bitmap bitmap = BitmapFactory.decodeFile(srcPath, newOpts);
 		return compressImageBackInputStream(bitmap, size);
 	}
@@ -89,10 +91,11 @@ public class ImageUtils {
 		}
 		BitmapFactory.Options newOpts = new BitmapFactory.Options();
 		newOpts.inJustDecodeBounds = true;
-		newOpts.inJustDecodeBounds = false;
 		newOpts.inSampleSize = calculateInSampleSize(newOpts, width, height);
 		newOpts.inPreferredConfig = Config.RGB_565;
 		ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());
+		BitmapFactory.decodeStream(isBm, null, newOpts);
+		newOpts.inJustDecodeBounds = false;
 		Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, newOpts);
 		return compressImage(bitmap, size);
 	}

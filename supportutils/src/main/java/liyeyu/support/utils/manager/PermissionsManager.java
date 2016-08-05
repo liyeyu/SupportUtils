@@ -26,34 +26,26 @@ import liyeyu.support.utils.utils.ToastUtil;
  * Created by Liyeyu on 2016/6/2.
  */
 public class PermissionsManager extends BaseManager{
-    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
-    final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
+    public static final PermissionsManager manager = new PermissionsManager();
+    public static final int REQUEST_CODE_ASK_PERMISSIONS = 123;
+    public static final int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
     private List<String> mPermmisions = new ArrayList<>();
-    private CheckCallBack mCheckCallBack;
-    private static PermissionsManager mManager;
     private static String askText = "you need open permission: %1$s ";
+    private CheckCallBack mCheckCallBack;
 
     private PermissionsManager() {
     }
 
-    public static PermissionsManager get() {
-        if (mManager == null) {
-            synchronized (PermissionsManager.class){
-                if (mManager == null) {
-                    mManager = new PermissionsManager();
-                }
-            }
-        }
-        return mManager;
+    public static PermissionsManager get(){
+        return manager;
     }
 
-    public static void setAskText(String askText) {
+    public  void setAskText(String askText) {
         PermissionsManager.askText = askText;
     }
 
     @TargetApi(Build.VERSION_CODES.M)
     public void checkPermissions(Activity mActivity, String permission, CheckCallBack mCheckCallBack) {
-        this.mCheckCallBack = mCheckCallBack;
         if (Build.VERSION.SDK_INT >= 23) {
             if (addPermission(mActivity,permission)) {
                 if (!mActivity.shouldShowRequestPermissionRationale(permission)) {
@@ -95,13 +87,13 @@ public class PermissionsManager extends BaseManager{
     }
 
     @TargetApi(Build.VERSION_CODES.M)
-    private boolean addPermission(Activity mActivity,String permission) {
+    private  boolean addPermission(Activity mActivity,String permission) {
         int hasPermission = mActivity.checkSelfPermission(permission);
         return hasPermission != PackageManager.PERMISSION_GRANTED;
     }
 
     @TargetApi(Build.VERSION_CODES.M)
-    private void showPermission(final Activity mActivity,String msg, final String permission) {
+    private  void showPermission(final Activity mActivity,String msg, final String permission) {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(mActivity);
         mBuilder.setMessage(msg);
         mBuilder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
@@ -120,7 +112,7 @@ public class PermissionsManager extends BaseManager{
     }
 
     @TargetApi(Build.VERSION_CODES.BASE_1_1)
-    public boolean checkNotificationPermissions(Context context) {
+    public  boolean checkNotificationPermissions(Context context) {
         AppOpsManager appOpsManager = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
         try {
             Field opPostNotification = appOpsManager.getClass().getField("OP_POST_NOTIFICATION");
@@ -146,7 +138,7 @@ public class PermissionsManager extends BaseManager{
      * @param context
      */
     @TargetApi(Build.VERSION_CODES.DONUT)
-    public void openAppSetting(Context context) {
+    public  void openAppSetting(Context context) {
         Intent i = new Intent(Settings.ACTION_APPLICATION_SETTINGS);
         i.setPackage(context.getPackageName());
         context.startActivity(i);
