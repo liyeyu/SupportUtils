@@ -115,7 +115,7 @@ public class PicUtil {
             }else if(requestCode==CODE_SELECT_PIC_MULTIPLE){
                 return data.getStringArrayListExtra("tag");
             }else  if(requestCode==CODE_CROP_PIC){
-//                startPhotoZoom(Uri.fromFile(new File(filePath)),context);
+                startPhotoZoom(Uri.fromFile(new File(filePath)),context);
                 return filePath;
             }
         }
