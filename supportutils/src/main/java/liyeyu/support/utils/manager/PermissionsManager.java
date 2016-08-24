@@ -46,6 +46,7 @@ public class PermissionsManager extends BaseManager{
 
     @TargetApi(Build.VERSION_CODES.M)
     public void checkPermissions(Activity mActivity, String permission, CheckCallBack mCheckCallBack) {
+        this.mCheckCallBack = mCheckCallBack;
         if (Build.VERSION.SDK_INT >= 23) {
             if (addPermission(mActivity,permission)) {
                 if (!mActivity.shouldShowRequestPermissionRationale(permission)) {
