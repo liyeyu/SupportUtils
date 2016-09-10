@@ -124,13 +124,11 @@ public class ImageUtils {
 		if (bm != null) {
 			if (!TextUtils.isEmpty(storePath)) {
 				File file = new File(storePath);
-				if (!file.exists()) {
-					try {
-						file.createNewFile();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+				File fileParent = new File(file.getParent());
+				if(!fileParent.exists()){
+					fileParent.mkdirs();
 				}
+				file.deleteOnExit();
 				CompressFormat format = CompressFormat.JPEG;
 				int quality = 100;
 				OutputStream stream = null;
@@ -153,13 +151,11 @@ public class ImageUtils {
 		if (bm != null) {
 			if (!TextUtils.isEmpty(storePath)) {
 				File file = new File(storePath);
-				if (!file.exists()) {
-					try {
-						file.createNewFile();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+				File fileParent = new File(file.getParent());
+				if(!fileParent.exists()){
+					fileParent.mkdirs();
 				}
+				file.deleteOnExit();
 				CompressFormat format = CompressFormat.JPEG;
 				int quality = 100;
 				OutputStream stream = null;
