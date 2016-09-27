@@ -33,25 +33,42 @@ public class PicUtil {
     public static int CODE_CAMERA_PIC = 5562;
     public static int CODE_CROP_PIC = 5563;
     public static String filePath =  "";
-
+    public static int CODE_CURRENT = 0;
+    public static int CODE_REQUEST_TAG = 0;
 
     /**
      * @param context
      */
     public static void openPhoto(Activity context){
+        openPhoto(context,CODE_SELECT_PIC);
+    }
+    /**
+     * @param context
+     */
+    public static void openPhoto(Activity context,int reqCode){
+        CODE_CURRENT = reqCode;
+        CODE_REQUEST_TAG = CODE_SELECT_PIC;
         Intent intent = new Intent(Intent.ACTION_PICK, null);
         intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 "image/*");
-        context.startActivityForResult(intent, CODE_SELECT_PIC);
+        context.startActivityForResult(intent, reqCode);
     }
     /**
      * @param context
      */
     public static void openMultiplePhoto(Activity context){
+        openMultiplePhoto(context,CODE_SELECT_PIC_MULTIPLE);
+    }
+    /**
+     * @param context
+     */
+    public static void openMultiplePhoto(Activity context,int reqCode){
+        CODE_CURRENT = reqCode;
+        CODE_REQUEST_TAG = CODE_SELECT_PIC_MULTIPLE;
 //        Intent intent = new Intent(context, UserDefinedPhotoActivity.class);
-//        context.startActivityForResult(intent, CODE_SELECT_PIC_MULTIPLE);
+//        context.startActivityForResult(intent, reqCode);
     }
 
     /**
@@ -65,12 +82,14 @@ public class PicUtil {
             context.startActivity(intent);
         }
     }
-
+    public static void openCamera(Activity context) {
+        openCamera(context,CODE_CAMERA_PIC);
+    }
     /**
      * @param context
      * @return
      */
-    public static void openCamera(final Activity context) {
+    public static void openCamera(final Activity context, final int reqCode) {
         if(!isEnvironment(context)){
             return;
         }
@@ -78,7 +97,7 @@ public class PicUtil {
             PermissionsManager.get().checkPermissions(context, Manifest.permission.CAMERA, new PermissionsManager.CheckCallBack() {
                 @Override
                 public void onSuccess(String permission) {
-                    takeCamera(context);
+                    takeCamera(context,reqCode);
                 }
 
                 @Override
@@ -87,11 +106,11 @@ public class PicUtil {
                 }
             });
         } else {
-            takeCamera(context);
+            takeCamera(context,reqCode);
         }
     }
 
-    private static String takeCamera(Activity context) {
+    private static String takeCamera(Activity context,int reqCode) {
         ContentValues values = new ContentValues();
         long time = new Date(System.currentTimeMillis()).getTime();
         values.put(MediaStore.Images.Media.TITLE, new Date(System.currentTimeMillis()).getTime());
@@ -100,22 +119,22 @@ public class PicUtil {
         filePath = photoFile.getPath();
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-        context.startActivityForResult(intent, CODE_CAMERA_PIC);
+        context.startActivityForResult(intent, reqCode);
         return filePath;
     }
 
 
     public static Object onActivityResult(Activity context,int requestCode, int resultCode, Intent data){
-        if (resultCode==Activity.RESULT_OK){
-            if (requestCode==CODE_SELECT_PIC){
+        if (resultCode==Activity.RESULT_OK) {
+            if (CODE_REQUEST_TAG == CODE_SELECT_PIC && requestCode == CODE_CURRENT) {
                 filePath = UriUtils.getImageAbsolutePath(context, data.getData());
-                return  filePath;
-            }else if(requestCode==CODE_CAMERA_PIC){
                 return filePath;
-            }else if(requestCode==CODE_SELECT_PIC_MULTIPLE){
+            } else if (CODE_REQUEST_TAG == CODE_CAMERA_PIC && requestCode == CODE_CURRENT) {
+                return filePath;
+            } else if (CODE_REQUEST_TAG == CODE_SELECT_PIC_MULTIPLE && requestCode == CODE_CURRENT) {
                 return data.getStringArrayListExtra("tag");
-            }else  if(requestCode==CODE_CROP_PIC){
-                startPhotoZoom(Uri.fromFile(new File(filePath)),context);
+            } else if (CODE_REQUEST_TAG == CODE_CROP_PIC && requestCode == CODE_CURRENT) {
+                startPhotoZoom(Uri.fromFile(new File(filePath)), context);
                 return filePath;
             }
         }
@@ -193,7 +212,6 @@ public class PicUtil {
     public static void startPhotoZoom(Uri uri,Activity mActivity) {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uri, "image/*");
-        // 设置裁剪
         intent.putExtra("crop", "true");
         // aspectX aspectY Is wide high proportion
         intent.putExtra("aspectX", 1);
