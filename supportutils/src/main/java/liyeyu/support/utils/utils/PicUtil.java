@@ -126,12 +126,12 @@ public class PicUtil {
 
     public static Object onActivityResult(Activity context,int requestCode, int resultCode, Intent data){
         if (resultCode==Activity.RESULT_OK) {
-            if (CODE_REQUEST_TAG == CODE_SELECT_PIC && requestCode == CODE_CURRENT) {
+            if (CODE_REQUEST_TAG == CODE_SELECT_PIC && requestCode == CODE_CURRENT && data!=null) {
                 filePath = UriUtils.getImageAbsolutePath(context, data.getData());
                 return filePath;
             } else if (CODE_REQUEST_TAG == CODE_CAMERA_PIC && requestCode == CODE_CURRENT) {
                 return filePath;
-            } else if (CODE_REQUEST_TAG == CODE_SELECT_PIC_MULTIPLE && requestCode == CODE_CURRENT) {
+            } else if (CODE_REQUEST_TAG == CODE_SELECT_PIC_MULTIPLE && requestCode == CODE_CURRENT && data!=null) {
                 return data.getStringArrayListExtra("tag");
             } else if (CODE_REQUEST_TAG == CODE_CROP_PIC && requestCode == CODE_CURRENT) {
                 startPhotoZoom(Uri.fromFile(new File(filePath)), context);
